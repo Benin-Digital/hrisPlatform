@@ -1,0 +1,773 @@
+﻿<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HRIS PLATFORM PRO - Manuel de RÃ©fÃ©rence Ultime (v1.0)</title>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+    <script>mermaid.initialize({ startOnLoad: true, theme: 'neutral', securityLevel: 'loose' });</script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Outfit:wght@400;700;900&family=Fira+Code:wght@400;500&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --emerald-50: #ecfdf5;
+            --emerald-100: #d1fae5;
+            --emerald-200: #a7f3d0;
+            --emerald-500: #10b981;
+            --emerald-600: #059669;
+            --emerald-700: #047857;
+            --gray-50: #f9fafb;
+            --gray-100: #f3f4f6;
+            --gray-200: #e5e7eb;
+            --gray-300: #d1d5db;
+            --gray-600: #4b5563;
+            --gray-700: #374151;
+            --gray-800: #1f2937;
+            --gray-900: #111827;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            color: var(--gray-800);
+            background: #fff;
+            min-height: 100vh;
+            scroll-behavior: smooth;
+        }
+
+        h1,
+        h2,
+        h3,
+        h4,
+        .heading-font {
+            font-family: 'Outfit', sans-serif;
+        }
+
+        code,
+        pre {
+            font-family: 'Fira Code', monospace;
+            font-size: 0.85em;
+            background: #2d3748;
+            color: #edf2f7;
+            padding: 0.2rem 0.4rem;
+            border-radius: 0.4rem;
+        }
+
+        pre {
+            padding: 1.5rem;
+            overflow-x: auto;
+            margin: 1.5rem 0;
+            border: 1px solid #4a5568;
+            border-radius: 1rem;
+        }
+
+        @media print {
+            .no-print {
+                display: none !important;
+            }
+
+            .container {
+                max-width: 100%;
+                padding: 0;
+            }
+
+            .section {
+                border: none !important;
+                box-shadow: none !important;
+                page-break-inside: avoid;
+                margin-bottom: 3rem;
+            }
+        }
+
+        .header {
+            background: linear-gradient(135deg, var(--emerald-600) 0%, var(--emerald-700) 100%);
+            color: white;
+            padding: 8rem 2rem;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(16, 185, 129, 0.2);
+            position: relative;
+        }
+
+        .header h1 {
+            font-size: 4.5rem;
+            font-weight: 900;
+            margin-bottom: 1rem;
+            letter-spacing: -0.05em;
+        }
+
+        .header .subtitle {
+            font-size: 1.6rem;
+            opacity: 0.95;
+            font-weight: 300;
+            max-width: 1000px;
+            margin: 0 auto;
+            line-height: 1.4;
+        }
+
+        .export-buttons {
+            background: white;
+            padding: 1.5rem 2rem;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 1px solid var(--gray-100);
+        }
+
+        .btn {
+            padding: 0.8rem 1.8rem;
+            border: none;
+            border-radius: 0.75rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.3s;
+            font-size: 1rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.6rem;
+        }
+
+        .btn-primary {
+            background: var(--emerald-600);
+            color: white;
+        }
+
+        .btn-secondary {
+            background: var(--gray-100);
+            color: var(--gray-700);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 5rem 2.5rem;
+        }
+
+        .toc {
+            background: var(--gray-50);
+            padding: 3rem;
+            border-radius: 1.5rem;
+            border: 2px solid var(--emerald-100);
+            margin-bottom: 5rem;
+        }
+
+        .toc h2 {
+            font-size: 2.2rem;
+            color: var(--emerald-700);
+            margin-bottom: 2rem;
+        }
+
+        .toc ul {
+            list-style: none;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1rem;
+        }
+
+        .toc a {
+            color: var(--gray-700);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1rem;
+            display: block;
+            padding: 0.5rem;
+            border-radius: 0.5rem;
+            transition: 0.2s;
+        }
+
+        .toc a:hover {
+            color: var(--emerald-600);
+            background: white;
+            padding-left: 1rem;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+        }
+
+        .section {
+            background: white;
+            padding: 4rem;
+            border-radius: 2.5rem;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.04);
+            margin-bottom: 5rem;
+            border: 1px solid var(--gray-100);
+        }
+
+        h2 {
+            color: var(--emerald-700);
+            font-size: 2.8rem;
+            margin-bottom: 2.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        h2::after {
+            content: "";
+            flex: 1;
+            height: 3px;
+            background: linear-gradient(to right, var(--emerald-500), transparent);
+        }
+
+        h3 {
+            color: var(--gray-900);
+            font-size: 2rem;
+            margin-top: 4rem;
+            margin-bottom: 1.5rem;
+            border-left: 8px solid var(--emerald-500);
+            padding-left: 1.5rem;
+        }
+
+        h4 {
+            color: var(--emerald-600);
+            font-size: 1.5rem;
+            margin: 2rem 0 1rem 0;
+            font-weight: 700;
+        }
+
+        .mermaid {
+            background: white;
+            padding: 2.5rem;
+            border-radius: 1.5rem;
+            margin: 3rem 0;
+            border: 1px solid var(--gray-200);
+            box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.02);
+        }
+
+        .screenshot-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+            gap: 3rem;
+            margin: 3.5rem 0;
+        }
+
+        .screenshot-container {
+            text-align: center;
+        }
+
+        .screenshot-container img {
+            width: 100%;
+            border-radius: 1.5rem;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.2);
+            border: 1px solid var(--gray-200);
+        }
+
+        .screenshot-caption {
+            margin-top: 1.2rem;
+            font-style: italic;
+            color: var(--gray-600);
+            font-size: 1rem;
+            font-weight: 600;
+        }
+
+        .table-wrapper {
+            overflow-x: auto;
+            margin: 3rem 0;
+            border-radius: 1.25rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            border: 1px solid var(--gray-200);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th {
+            background: var(--emerald-600);
+            color: white;
+            padding: 1.5rem;
+            text-align: left;
+            font-size: 1.1rem;
+        }
+
+        td {
+            padding: 1.25rem 1.5rem;
+            border-bottom: 1px solid var(--gray-100);
+            font-size: 1.05rem;
+        }
+
+        tr:hover {
+            background: var(--emerald-50);
+        }
+
+        .badge {
+            padding: 0.5rem 1.2rem;
+            border-radius: 3rem;
+            font-size: 0.9rem;
+            font-weight: 900;
+            text-transform: uppercase;
+        }
+
+        .badge-red {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .badge-emerald {
+            background: var(--emerald-100);
+            color: var(--emerald-700);
+        }
+
+        .alert {
+            border-radius: 1.25rem;
+            padding: 2rem;
+            margin: 2.5rem 0;
+            border-left: 10px solid;
+            font-size: 1.15rem;
+        }
+
+        .alert-info {
+            background: #eff6ff;
+            border-color: #3b82f6;
+            color: #1e40af;
+        }
+
+        .alert-success {
+            background: #f0fdf4;
+            border-color: #10b981;
+            color: #064e3b;
+        }
+
+        .footer {
+            background: var(--gray-900);
+            color: white;
+            padding: 8rem 2rem;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+
+    <header class="header">
+        <h1>HRIS PLATFORM PRO</h1>
+        <p class="subtitle">L'Ã‰cosystÃ¨me RH Intelligent de Nouvelle GÃ©nÃ©ration<br>Manuel de RÃ©fÃ©rence Technique & Guide
+            OpÃ©rationnel IntÃ©gral</p>
+    </header>
+
+    <div class="export-buttons no-print">
+        <button class="btn btn-primary" onclick="window.print()">ðŸ“„ IMPRIMER / PDF</button>
+        <button class="btn btn-secondary" onclick="exportToWord()">ðŸ“ EXPORT WORD</button>
+    </div>
+
+    <div class="container">
+
+        <nav class="toc no-print">
+            <h2>ðŸ“‹ Sommaire</h2>
+            <ul>
+                <li><a href="#intro">1. Introduction</a></li>
+                <li><a href="#logic">2. Fonctionnement Global</a></li>
+                <li><a href="#architecture">3. Architecture & Base de DonnÃ©es</a></li>
+                <li><a href="#auth">4. Authentification & SÃ©curitÃ©</a></li>
+                <li><a href="#roles">5. RÃ´les & Permissions Granulaires</a></li>
+                <li><a href="#modules">6. Les 13 Modules Fonctionnels</a></li>
+                <li><a href="#guides">7. Guides d'Utilisation par Profil</a></li>
+                <li><a href="#installation">8. Installation & DÃ©ploiement</a></li>
+                <li><a href="#conclusion">9. Conclusion</a></li>
+            </ul>
+        </nav>
+
+        <!-- SECTION 1: INTRODUCTION -->
+        <section class="section" id="intro">
+            <h2>âœ¨ 1. Introduction</h2>
+            <p>Bienvenue dans la documentation officielle de <strong>HRIS Platform Pro</strong>. Ce document constitue
+                la source unique de vÃ©ritÃ© pour tous les aspects de la plateforme, du code source aux interfaces
+                utilisateurs.</p>
+            <p>ConÃ§ue pour rÃ©pondre aux dÃ©fis des RH modernes, cette application centralise la gestion du personnel, le
+                e-learning, la communication et l'analyse de productivitÃ© dans un environnement <strong>Emerald
+                    Design</strong> fluide et hautement sÃ©curisÃ©.</p>
+
+            <div class="screenshot-container">
+                <img src="/docs_img/uploaded_media_0_1769696842849.png"
+                    alt="Welcome Page Hero">
+                <p class="screenshot-caption">Fig 1.1 : Interface publique Welcome - Point d'entrÃ©e de la marque
+                    employeur.</p>
+            </div>
+        </section>
+
+        <!-- SECTION 2: LOGIC -->
+        <section class="section" id="logic">
+            <h2>ðŸ”„ 2. Fonctionnement de la Plateforme</h2>
+            <p>Le systÃ¨me repose sur un flux de donnÃ©es centrÃ© sur l'utilisateur et son rÃ´le. Voici le cycle de vie
+                typique sur HRIS Pro :</p>
+
+            <div class="mermaid">
+                graph LR
+                A[Portail Public] --> B[Connexion SÃ©curisÃ©e]
+                B --> C{Identification RÃ´le}
+                C --> D[Dashboard Super Admin]
+                C --> E[Dashboard RH]
+                C --> F[Dashboard Apprenant]
+                D --> G[Pilotage Global]
+                E --> H[Recrutement & Collaborateurs]
+                F --> I[E-Learning & TÃ¢ches]
+            </div>
+
+            <div class="alert alert-info">
+                <strong>Logique MÃ©tier :</strong> L'application automatise les tÃ¢ches rÃ©pÃ©titives (gÃ©nÃ©ration de
+                matricules, calculs de productivitÃ©, alertes d'Ã©chÃ©ances) pour permettre aux Ã©quipes RH de se concentrer
+                sur l'humain.
+            </div>
+        </section>
+
+        <!-- SECTION 3: ARCHITECTURE -->
+        <section class="section" id="architecture">
+            <h2>ðŸ› ï¸ 3. Architecture & Base de DonnÃ©es</h2>
+            <p>HRIS Pro est une application **Monolithe Moderne** utilisant Laravel 11 et Vue.js via Inertia.js.</p>
+
+            <h3>SchÃ©ma de la Base de DonnÃ©es (ERD SimplifiÃ©)</h3>
+            <div class="mermaid">
+                erDiagram
+                USER ||--o{ MESSAGE : "envoie/reÃ§oit"
+                USER ||--o{ TACHE : "assignÃ©"
+                USER ||--o{ INSCRIPTION : "s'inscrit"
+                ENTITE ||--o{ USER : "contient"
+                FORMATION ||--o{ SEQUENCE : "possÃ¨de"
+                SEQUENCE ||--o{ LECON : "contient"
+                FORMATION ||--o{ INSCRIPTION : "reÃ§oit"
+                OFFRE_EMPLOI ||--o{ CANDIDATURE : "gÃ©nÃ¨re"
+            </div>
+
+            <h3>Statistiques du Projet</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>MÃ©trique</th>
+                        <th>DÃ©tails</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>ModÃ¨les Eloquent</strong></td>
+                        <td>29 (User, Document, Formation, Candidature, etc.)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>ContrÃ´leurs</strong></td>
+                        <td>22+ (Authentification, Dashboard, RH, Admin)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Pages Vue.js</strong></td>
+                        <td>50+ (Interface Admin, Espace Apprenant, Welcome)</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <!-- SECTION 4: AUTH -->
+        <section class="section" id="auth">
+            <h2>ðŸ” 4. Authentification & SÃ©curitÃ</h2>
+            <p>L'accès est protÃ©gÃ© par un système de redirection dynamique.</p>
+
+            <div class="screenshot-grid">
+                <div class="screenshot-container">
+                    <img src="/docs_img/uploaded_media_4_1769697115312.png"
+                        alt="Login">
+                    <p class="screenshot-caption">Fig 4.1 : Page de connexion unifiÃ©e.</p>
+                </div>
+                <div class="screenshot-container">
+                    <div class="mermaid">
+                        sequenceDiagram
+                        User->>Login: Credentials
+                        Login->>Database: Auth Check
+                        Database-->>Login: User Valid + Role
+                        Login->>Dashboard: Dynamic Redirect
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 5: ROLES -->
+        <section class="section" id="roles">
+            <h2>ðŸ‘¥ 5. Rôles et Permissions Granulaires</h2>
+            <p>Le système gère <strong>7 profils</strong> avec des permissions transversales.</p>
+
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Rôle</th>
+                            <th>Permissions Clés</th>
+                            <th>Accès Dashboard</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><span class="badge badge-red">Super Admin</span></td>
+                            <td>Module Systeme, Gestion Entités, Stats Publiques.</td>
+                            <td>/super-admin</td>
+                        </tr>
+                        <tr>
+                            <td><span class="badge badge-emerald">Resp. RH</span></td>
+                            <td>Recrutement, Employés, Formations.</td>
+                            <td>/rh</td>
+                        </tr>
+                        <tr>
+                            <td><span class="badge badge-emerald">Manager</span></td>
+                            <td>Suivi equipes, Taches, Agenda.</td>
+                            <td>/manager</td>
+                        </tr>
+                        <tr>
+                            <td><span class="badge badge-emerald">Formateur</span></td>
+                            <td>Création de Cours, Quiz, Evaluations.</td>
+                            <td>/formateur</td>
+                        </tr>
+                        <tr>
+                            <td><span class="badge badge-emerald">Collaborateur</span></td>
+                            <td>Consultation, Messagerie, E-Learning.</td>
+                            <td>/collaborateur</td>
+                        </tr>
+                        <tr>
+                            <td><span class="badge badge-emerald">InvitÃ© (EXT)</span></td>
+                            <td>Lecture Documents/Formations marquÃ©s 'Extranet'.</td>
+                            <td>/extranet</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- SECTION 6: MODULES (THE BIG ONE) -->
+        <section class="section" id="modules">
+            <h2>ðŸ§© 6. Les 13 Modules Fonctionnels</h2>
+            <p>Chaque module est illustrÃ© ici avec les captures d'Ã©cran soumises.</p>
+
+            <!-- MODULE 1: PUBLIC STATS -->
+            <h3>1. Statistiques Publiques & Dashboards</h3>
+            <div class="screenshot-grid">
+                <div class="screenshot-container">
+                    <img src="/docs_img/uploaded_media_1_1769696842849.png"
+                        alt="Public Stats">
+                    <p class="screenshot-caption">Fig 6.1 : KPIs publics sur la page d'accueil.</p>
+                </div>
+                <div class="screenshot-container">
+                    <img src="/docs_img/uploaded_media_1_1769697115312.png"
+                        alt="SA Dash">
+                    <p class="screenshot-caption">Fig 6.2 : Tableau de bord Super Admin - Vue globale.</p>
+                </div>
+            </div>
+
+            <!-- MODULE 2: PRODUCTIVITY -->
+            <h3>2. Analyse de ProductivitÃ©</h3>
+            <div class="screenshot-grid">
+                <div class="screenshot-container">
+                    <img src="/docs_img/uploaded_media_2_1769697115312.png"
+                        alt="Productivity Gen">
+                    <p class="screenshot-caption">Fig 6.3 : GÃ©nÃ©rateur de rapports de productivitÃ©.</p>
+                </div>
+                <div class="screenshot-container">
+                    <img src="/docs_img/uploaded_media_0_1769697448557.png"
+                        alt="Productivity View">
+                    <p class="screenshot-caption">Fig 6.4 : Consultation des stats de productivitÃ© par entitÃ©.</p>
+                </div>
+            </div>
+
+            <!-- MODULE 3: COLLABORATORS -->
+            <h3>3. Gestion du Personnel (RH)</h3>
+            <div class="screenshot-grid">
+                <div class="screenshot-container">
+                    <img src="/docs_img/uploaded_media_1_1769697448557.png"
+                        alt="User List">
+                    <p class="screenshot-caption">Fig 6.5 : Annuaire des collaborateurs (Liste administrative).</p>
+                </div>
+                <div class="screenshot-container">
+                    <img src="/docs_img/uploaded_media_2_1769697448557.png"
+                        alt="Creation User">
+                    <p class="screenshot-caption">Fig 6.6 : Formulaire de crÃ©ation de profil (GÃ©nÃ©ration de matricule).
+                    </p>
+                </div>
+            </div>
+
+            <!-- MODULE 4: RECRUITMENT -->
+            <h3>4. Recrutement & Candidatures</h3>
+            <div class="screenshot-grid">
+                <div class="screenshot-container">
+                    <img src="/docs_img/uploaded_media_2_1769696842849.png"
+                        alt="Public Job Offers">
+                    <p class="screenshot-caption">Fig 6.7 : Section publique des offres d'emploi.</p>
+                </div>
+                <div class="screenshot-container">
+                    <img src="/docs_img/uploaded_media_3_1769697448557.png"
+                        alt="RH Recruit Dash">
+                    <p class="screenshot-caption">Fig 6.8 : Dashboard RH - Suivi des ouvertures de postes.</p>
+                </div>
+                <div class="screenshot-container">
+                    <img src="/docs_img/uploaded_media_4_1769697448557.png"
+                        alt="Candidatures">
+                    <p class="screenshot-caption">Fig 6.9 : Gestion des candidatures et tÃ©lÃ©chargement de CV.</p>
+                </div>
+            </div>
+
+            <!-- MODULE 5: E-LEARNING -->
+            <h3>5. Formations (LMS)</h3>
+            <div class="screenshot-grid">
+                <div class="screenshot-container">
+                    <img src="/docs_img/uploaded_media_2_1769697637836.png"
+                        alt="Training Catalog">
+                    <p class="screenshot-caption">Fig 6.10 : Catalogue de cours avec barres de progression.</p>
+                </div>
+                <div class="screenshot-container">
+                    <img src="/docs_img/uploaded_media_0_1769697876127.png"
+                        alt="Training Header">
+                    <p class="screenshot-caption">Fig 6.11 : En-tÃªte d'une formation - DÃ©tails techniques.</p>
+                </div>
+                <div class="screenshot-container">
+                    <img src="/docs_img/uploaded_media_1_1769697876127.png"
+                        alt="Training Body">
+                    <p class="screenshot-caption">Fig 6.12 : DÃ©tail du programme et bouton d'inscription.</p>
+                </div>
+            </div>
+
+            <!-- MODULE 6: COMMUNICATIONS -->
+            <h3>6. ActualitÃ©s, Blog & Newsletter</h3>
+            <div class="screenshot-grid">
+                <div class="screenshot-container">
+                    <img src="/docs_img/uploaded_media_4_1769697115312.png"
+                        alt="Blog/Newsletter">
+                    <p class="screenshot-caption">Fig 6.13 : Section actualitÃ©s et interface newsletter publique.</p>
+                </div>
+                <div class="screenshot-container">
+                    <img src="/docs_img/uploaded_media_3_1769697115312.png"
+                        alt="Admin Newsletter">
+                    <p class="screenshot-caption">Fig 6.14 : Gestion administrative des abonnÃ©s newsletter.</p>
+                </div>
+            </div>
+
+            <!-- MODULE 7: GALERIE -->
+            <h3>7. Galerie MultimÃ©dia</h3>
+            <div class="screenshot-grid">
+                <div class="screenshot-container">
+                    <img src="/docs_img/uploaded_media_3_1769696842849.png"
+                        alt="Gallery Admin">
+                    <p class="screenshot-caption">Fig 6.15 : Interface de gestion de la galerie (Drag & Drop).</p>
+                </div>
+                <div class="screenshot-container">
+                    <img src="/docs_img/uploaded_media_4_1769696842849.png"
+                        alt="Gallery Welcome">
+                    <p class="screenshot-caption">Fig 6.16 : Rendu de la galerie sur la page d'accueil.</p>
+                </div>
+            </div>
+
+            <!-- MODULE 8: AGENTDA & MESSAGING -->
+            <h3>8. Collaboration : Agenda & Messagerie</h3>
+            <div class="screenshot-grid">
+                <div class="screenshot-container">
+                    <img src="/docs_img/uploaded_media_4_1769697637836.png"
+                        alt="Agenda">
+                    <p class="screenshot-caption">Fig 6.17 : Vue calendrier des Ã©vÃ©nements d'entreprise.</p>
+                </div>
+                <div class="screenshot-container">
+                    <img src="/docs_img/uploaded_media_3_1769697637836.png"
+                        alt="Chat">
+                    <p class="screenshot-caption">Fig 6.18 : Chat interne en temps rÃ©el (Universal Chat).</p>
+                </div>
+            </div>
+
+            <!-- MODULE 9: PORTALS -->
+            <h3>9. Espaces Personnels & Extranet</h3>
+            <div class="screenshot-grid">
+                <div class="screenshot-container">
+                    <img src="/docs_img/uploaded_media_0_1769697637836.png"
+                        alt="Collab Dash">
+                    <p class="screenshot-caption">Fig 6.19 : Espace personnel du collaborateur.</p>
+                </div>
+                <div class="screenshot-container">
+                    <img src="/docs_img/uploaded_media_1_1769697637836.png"
+                        alt="Extranet Dash">
+                    <p class="screenshot-caption">Fig 6.20 : Vue Portal Extranet (AccÃ¨s restreint).</p>
+                </div>
+            </div>
+
+            <div class="alert alert-success">
+                <strong>Tous les 22 visuels ont Ã©tÃ© soigneusement intÃ©grÃ©s pour illustrer le fonctionnement rÃ©el de
+                    votre HRIS !</strong>
+            </div>
+        </section>
+
+        <!-- SECTION 7: GUIDES -->
+        <section class="section" id="guides">
+            <h2>ðŸ‘¤ 7. Guide d'Utilisation par RÃ´le</h2>
+
+            <h3>ðŸ”´ Super Admin (Le Capitane)</h3>
+            <p>Il pilote toute l'organisation. Ses prioritÃ©s :</p>
+            <ul>
+                <li>CrÃ©ation des <strong>EntitÃ©s</strong> et des <strong>RÃ´les</strong>.</li>
+                <li>Validation des <strong>Statistiques Publiques</strong>.</li>
+                <li>Audit de la <strong>ProductivitÃ© Globale</strong>.</li>
+            </ul>
+
+            <h3>ðŸŸ  Responsable RH (Le Gestionnaire)</h3>
+            <p>Son quotidien :</p>
+            <ul>
+                <li>IntÃ©gration des nouveaux talents via le module <strong>Collaborateurs</strong>.</li>
+                <li>Suivi des <strong>Candidatures</strong> entrantes.</li>
+                <li>Animation du plan de formation.</li>
+            </ul>
+        </section>
+
+        <!-- SECTION 8: INSTALLATION -->
+        <section class="section" id="installation">
+            <h2>ðŸš€ 8. Installation & DÃ©ploiement</h2>
+            <p>La plateforme est prÃªte Ã  l'emploi. Suivez ces Ã©tapes techniques :</p>
+
+            <h4>Configuration Serveur</h4>
+            <pre># 1. Installer dÃ©pendances PHP
+composer install
+
+# 2. Installer dÃ©pendances JS
+npm install
+
+# 3. Base de donnÃ©es
+php artisan migrate --seed
+
+# 4. Lancement (Dev)
+php artisan serve
+npm run dev</pre>
+
+            <div class="alert alert-warning">
+                <strong>Attention :</strong> N'oubliez pas de configurer le lien symbolique pour les images :
+                <code>php artisan storage:link</code>.
+            </div>
+        </section>
+
+        <!-- SECTION 9: CONCLUSION -->
+        <section class="section" id="conclusion">
+            <h2>ðŸ 9. Conclusion</h2>
+            <p>Ce manuel a parcouru l'intÃ©gralitÃ© des richesses de <strong>HRIS Platform Pro</strong>. En combinant un
+                design Ã©lÃ©gant (Emerald) avec une architecture technique robuste (Laravel 11), vous disposez d'un outil
+                de classe mondiale.</p>
+            <p>La force de cette plateforme rÃ©side dans sa modularitÃ© : que ce soit pour le recrutement, la formation ou
+                la collaboration quotidienne, chaque utilisateur trouve son espace de travail optimisÃ©.</p>
+            <p><em>Fin du document de rÃ©fÃ©rence v1.0</em></p>
+        </section>
+
+    </div>
+
+    <footer class="footer">
+        <p><strong>HRIS PLATFORM PRO - 2026</strong></p>
+        <p>Documentation GÃ©nÃ©rÃ©e avec Excellence | Plateforme RH IntÃ©grÃ©e</p>
+    </footer>
+
+    <script>
+        function exportToWord() {
+            const header = "<html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'><head><meta charset='utf-8'></head><body>";
+            const footer = "</body></html>";
+            const content = document.querySelector('.container').innerHTML;
+            const blob = new Blob(['\ufeff', header + content + footer], { type: 'application/msword' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url; link.download = 'HRIS_Pro_Master_Doc_Total.doc';
+            document.body.appendChild(link); link.click(); document.body.removeChild(link);
+        }
+    </script>
+</body>
+
+</html>
