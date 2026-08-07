@@ -1,0 +1,15 @@
+*
+!private/
+!public/
+!.gitignore
+.env
+.env.*
+!.env.example
+/vendor/
+/node_modules/
+/storage/
+/bootstrap/cache/
+*.log
+*.sql
+.idea/
+.vscode/
