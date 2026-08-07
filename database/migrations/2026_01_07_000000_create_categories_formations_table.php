@@ -1,0 +1,28 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    public function up(): void
+    {
+        Schema::create('categories_formations', function (Blueprint $table) {
+            $table->id();
+            $table->string('nom');
+            $table->string('slug')->unique();
+            $table->text('description')->nullable();
+            $table->string('icone')->nullable();
+            $table->string('couleur')->nullable();
+            $table->foreignId('parent_id')->nullable()->constrained('categories_formations')->onDelete('set null');
+            $table->integer('ordre')->default(0);
+            $table->timestamps();
+        });
+    }
+
+    public function down(): void
+    {
+        Schema::dropIfExists('categories_formations');
+    }
+};
