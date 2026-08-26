@@ -5,6 +5,7 @@ namespace App\Http\Middleware;
 use App\Models\Tache;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
+use Inertia\Inertia;
 
 class HandleInertiaRequests extends Middleware
 {
@@ -19,29 +20,6 @@ class HandleInertiaRequests extends Middleware
     {
         $user = $request->user();
 
-        $tachesPersonnelles = null;
-        $tachesEntite = null;
-
-        if ($user) {
-            $userId = $user->id;
-            $entiteId = $user->entite_id;
-
-            // === Tâches personnelles ===
-            $baseQuery = Tache::where('assigne_a', $userId)->orWhere('createur_id', $userId);
-            $tachesPersonnelles = $this->getTaskData($baseQuery);
-
-            // === Tâches de l'entité ===
-            if ($entiteId) {
-                $entiteQuery = Tache::where('entite_id', $entiteId);
-                $tachesEntite = $this->getTaskData($entiteQuery);
-            }
-
-            // === Tâches Globales (Super Admin) ===
-            if ($user->hasRole('super_admin')) {
-                $tachesEntite = $this->getTaskData(Tache::query());
-            }
-        }
-
         return array_merge(parent::share($request), [
             // === FLASH MESSAGES ===
             'flash' => [
@@ -49,7 +27,7 @@ class HandleInertiaRequests extends Middleware
                 'error' => fn () => $request->session()->get('error'),
             ],
 
-            // === AUTHENTIFICATION : INDISPENSABLE ===
+            // === AUTHENTIFICATION ===
             'auth' => [
                 'user' => $user ? [
                     'id' => $user->id,
@@ -74,31 +52,63 @@ class HandleInertiaRequests extends Middleware
                 ] : null,
             ],
 
-            // Tâches
-            'tachesPersonnelles' => $tachesPersonnelles,
-            'tachesEntite' => $tachesEntite,
-            'tachesDashboard' => $tachesPersonnelles, // Compatibilité temporaire
+            // ✅ Tâches personnelles (chargées uniquement si demandées)
+            'tachesPersonnelles' => Inertia::lazy(fn () => $user ? $this->getTaskData(
+                Tache::where('assigne_a', $user->id)->orWhere('createur_id', $user->id)
+            ) : null),
+
+            // ✅ Tâches de l'entité (chargées uniquement si demandées)
+            'tachesEntite' => Inertia::lazy(function () use ($user) {
+                if (!$user) return null;
+
+                // Super Admin voit tout
+                if ($user->hasRole('super_admin')) {
+                    return $this->getTaskData(Tache::query());
+                }
+
+                // Autres : tâches de l'entité
+                if ($user->entite_id) {
+                    return $this->getTaskData(Tache::where('entite_id', $user->entite_id));
+                }
+
+                return null;
+            }),
+
+            // ✅ Compatibilité temporaire (Dashboard)
+            'tachesDashboard' => Inertia::lazy(fn () => $user ? $this->getTaskData(
+                Tache::where('assigne_a', $user->id)->orWhere('createur_id', $user->id)
+            ) : null),
         ]);
     }
 
+    /**
+     * Récupère les statistiques et les tâches récentes.
+     */
     private function getTaskData($query)
     {
+        // Statistiques
+        $stats = [
+            'total' => (clone $query)->count(),
+            'enCours' => (clone $query)->whereIn('statut', ['en_cours', 'en_attente'])->count(),
+            'terminees' => (clone $query)->where('statut', 'terminee')->count(),
+            'enRetard' => (clone $query)->where('date_echeance', '<', now())->where('statut', '!=', 'terminee')->count(),
+        ];
+
+        // Tâches récentes (5 dernières)
+        $recents = (clone $query)
+            ->with(['assigne:id,prenom,nom', 'createur:id,prenom,nom'])
+            ->latest()
+            ->take(5)
+            ->get()
+            ->map(function ($tache) {
+                $tache->createur_prenom_nom = $tache->createur ? $tache->createur->prenom . ' ' . $tache->createur->nom : 'Inconnu';
+                $tache->assigne_prenom_nom = $tache->assigne ? $tache->assigne->prenom . ' ' . $tache->assigne->nom : 'Non assignée';
+                return $tache;
+            });
+
         return [
-            'stats' => [
-                'total' => (clone $query)->count(),
-                'enCours' => (clone $query)->whereIn('statut', ['en_cours', 'en_attente'])->count(),
-                'terminees' => (clone $query)->where('statut', 'terminee')->count(),
-                'enRetard' => (clone $query)->where('date_echeance', '<', now())->where('statut', '!=', 'terminee')->count(),
-            ],
-            'recents' => (clone $query)->with(['assigne:id,prenom,nom', 'createur:id,prenom,nom'])
-                ->latest()
-                ->take(5)
-                ->get()
-                ->map(function ($tache) {
-                    $tache->createur_prenom_nom = $tache->createur ? $tache->createur->prenom . ' ' . $tache->createur->nom : 'Inconnu';
-                    $tache->assigne_prenom_nom = $tache->assigne ? $tache->assigne->prenom . ' ' . $tache->assigne->nom : 'Non assignée';
-                    return $tache;
-                }),
+            'stats' => $stats,
+            'recents' => $recents,
         ];
     }
 }

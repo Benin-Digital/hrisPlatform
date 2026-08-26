@@ -3,7 +3,7 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head, Link, useForm } from '@inertiajs/vue3';
 import { ref, watch } from 'vue';
 import {
-    SpeakerphoneIcon,
+    MegaphoneIcon,
     ExclamationTriangleIcon,
     CalendarIcon,
     UsersIcon,
@@ -80,7 +80,7 @@ watch(() => form.visibilite, (newVal) => {
                 <div class="bg-white rounded-2xl shadow-xl overflow-hidden">
                     <!-- Header -->
                     <div class="bg-gradient-to-r from-indigo-600 to-indigo-800 px-8 py-10 text-white flex items-center">
-                        <SpeakerphoneIcon class="w-10 h-10 mr-4" />
+                        <MegaphoneIcon class="w-10 h-10 mr-4" />
                         <div>
                             <h1 class="text-3xl md:text-4xl font-bold">Publier une nouvelle annonce</h1>
                             <p class="mt-3 text-indigo-100">Créez et diffusez votre message à l'équipe ou à toute la plateforme</p>
@@ -154,7 +154,7 @@ watch(() => form.visibilite, (newVal) => {
                                 <!-- Type d'annonce -->
                                 <div>
                                     <label class="block text-lg font-semibold text-gray-800 mb-2 flex items-center">
-                                        <SpeakerphoneIcon class="w-5 h-5 mr-2" />
+                                        <MegaphoneIcon class="w-5 h-5 mr-2" />
                                         Type
                                     </label>
                                     <select v-model="form.type_annonce" class="w-full px-5 py-3 border border-gray-300 rounded-xl focus:ring-indigo-500">

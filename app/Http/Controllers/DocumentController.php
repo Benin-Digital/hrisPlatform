@@ -207,7 +207,7 @@ class DocumentController extends Controller
         }
 
         $request->validate([
-            'documents.*' => 'required|file|max:51200', // 50MB max
+           'documents.*' => 'required|file|max:51200|mimes:pdf,doc,docx,xls,xlsx,ppt,pptx,jpg,jpeg,png,gif,zip,rar,txt,csv', // 50MB max
             'espace_id' => 'nullable|exists:espaces_collaboratifs,id',
         ]);
 

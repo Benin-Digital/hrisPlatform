@@ -464,36 +464,7 @@ Route::middleware('auth')->group(function () {
 
     });
     
-    
 
-    // ============================================================
-    // TEST BROADCAST (à supprimer après validation)
-    // ============================================================
-    Route::get('/test-broadcast/{userId}', function ($userId) {
-        $user = \App\Models\Utilisateur::find($userId);
-        if (!$user) {
-            return response()->json(['error' => 'Utilisateur non trouvé'], 404);
-        }
-
-        $notification = (object) [
-            'id' => uniqid(),
-            'data' => [
-                'message' => '🔔 Ceci est un test de notification en temps réel !',
-                'titre' => 'Test WebSocket',
-            ],
-            'created_at' => now(),
-        ];
-
-        broadcast(new \App\Events\NouvelleNotification($notification, $userId));
-
-        return response()->json([
-            'success' => true,
-            'message' => 'Broadcast envoyé à l\'utilisateur ' . $userId
-        ]);
-    });
-    Route::get('/recrutement', function () {
-        return redirect()->route('recrutement.pipeline');
-    })->name('recrutement.index');
 
     // ============================================================
     // RECRUTEMENT (Pipeline)
