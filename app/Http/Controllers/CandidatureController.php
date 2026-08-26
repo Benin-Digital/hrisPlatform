@@ -26,7 +26,8 @@ class CandidatureController extends Controller
 
         $offre = OffreEmploi::findOrFail($offreId);
 
-        $path = $request->file('cv')->store('cvs', 'public');
+        //  Stockage en local (privé)
+        $path = $request->file('cv')->store('cvs', 'local');
 
         Candidature::create([
             'offre_emploi_id' => $offre->id,
@@ -49,7 +50,6 @@ class CandidatureController extends Controller
     {
         $candidatures = Candidature::with('offre')->latest()->get();
 
-        // Regrouper par offre
         $offres = OffreEmploi::with(['candidatures' => function ($query) {
             $query->orderBy('created_at', 'desc');
         }])->get()->map(function($offre) {
@@ -77,16 +77,18 @@ class CandidatureController extends Controller
 
     public function downloadCv(Candidature $candidature)
     {
-        if (!Storage::disk('public')->exists($candidature->cv_path)) {
+        //  Vérifier sur le disque local
+        if (!Storage::disk('local')->exists($candidature->cv_path)) {
             abort(404, 'CV non trouvé.');
         }
-        return Storage::disk('public')->download($candidature->cv_path, 'CV_' . $candidature->nom . '_' . $candidature->prenom . '.' . pathinfo($candidature->cv_path, PATHINFO_EXTENSION));
+        return Storage::disk('local')->download($candidature->cv_path, 'CV_' . $candidature->nom . '_' . $candidature->prenom . '.' . pathinfo($candidature->cv_path, PATHINFO_EXTENSION));
     }
 
     public function destroy(Candidature $candidature)
     {
-        if (Storage::disk('public')->exists($candidature->cv_path)) {
-            Storage::disk('public')->delete($candidature->cv_path);
+        //  Supprimer du disque local
+        if (Storage::disk('local')->exists($candidature->cv_path)) {
+            Storage::disk('local')->delete($candidature->cv_path);
         }
         $candidature->delete();
         return back()->with('success', 'Candidature supprimée.');
@@ -110,9 +112,6 @@ class CandidatureController extends Controller
         return Inertia::render('Candidature/Spontanee');
     }
 
-    /**
-     * Enregistre une candidature spontanée
-     */
     public function storeSpontanee(Request $request)
     {
         $validated = $request->validate([
@@ -126,7 +125,8 @@ class CandidatureController extends Controller
             'message'           => 'nullable|string|max:2000',
         ]);
 
-        $cvPath = $request->file('cv')->store('candidatures/cv', 'public');
+        // Stockage en local (privé)
+        $cvPath = $request->file('cv')->store('candidatures/cv', 'local');
 
         Candidature::create([
             'offre_emploi_id'   => null,

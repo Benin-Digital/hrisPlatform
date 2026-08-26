@@ -101,7 +101,7 @@
                 isCollapsed && !isMobile ? 'justify-center p-3' : 'px-4 py-3 space-x-3',
                 'text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/30'
             ]" :title="isCollapsed && !isMobile ? 'Déconnexion' : ''">
-                <ArrowRightOnRectangleIcon class="w-6 h-6 flex-shrink-0" />
+                <ArrowRightStartOnRectangleIcon class="w-6 h-6 flex-shrink-0" />
                 <span v-if="!isCollapsed || isMobile" class="text-sm font-medium">Déconnexion</span>
             </Link>
         </div>
@@ -135,7 +135,7 @@ import {
     PhotoIcon,
     EnvelopeIcon,
     CogIcon,
-    ArrowRightOnRectangleIcon,
+    ArrowRightStartOnRectangleIcon,
     BuildingOfficeIcon
 } from '@heroicons/vue/24/outline';
 

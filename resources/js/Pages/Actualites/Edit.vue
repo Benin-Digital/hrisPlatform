@@ -4,7 +4,7 @@ import { Head, Link } from '@inertiajs/vue3';
 import { ref, watch } from 'vue';
 import axios from 'axios';
 import {
-    SpeakerphoneIcon,
+    MegaphoneIcon,
     ExclamationTriangleIcon,
     CalendarIcon,
     UsersIcon,
@@ -191,7 +191,7 @@ watch(() => form.value.visibilite, (newVal) => {
                             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                                 <div>
                                     <label class="block text-lg font-semibold text-gray-800 mb-2 flex items-center">
-                                        <SpeakerphoneIcon class="w-5 h-5 mr-2" />
+                                        <MegaphoneIcon class="w-5 h-5 mr-2" />
                                         Type
                                     </label>
                                     <select v-model="form.type_annonce" class="w-full px-5 py-3 border border-gray-300 rounded-xl focus:ring-indigo-500">

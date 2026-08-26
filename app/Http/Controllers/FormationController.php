@@ -30,7 +30,7 @@ class FormationController extends Controller
         $query = Formation::where('statut', '!=', 'archive')
             ->with(['categorie', 'formateur']);
 
-        // ✅ Filtres
+        // Filtres
         if ($request->filled('categorie')) {
             $query->where('categorie_id', $request->categorie);
         }
@@ -47,7 +47,7 @@ class FormationController extends Controller
             $query->where('mode_acces', $request->mode_acces);
         }
 
-        // ✅ Recherche full-text
+        //  Recherche full-text
         if ($request->filled('search')) {
             $search = $request->search;
             $query->where(function($q) use ($search) {
@@ -267,7 +267,7 @@ class FormationController extends Controller
             'capacite_max' => 'nullable|integer|min:1',
             'statut' => 'required|in:brouillon,publie,archive',
             'fichiers' => 'nullable|array',
-            'fichiers.*' => 'file|max:10240',
+            'fichiers.*' => 'file|max:10240|mimes:pdf,doc,docx,xls,xlsx,ppt,pptx,jpg,jpeg,png,zip',
         ]);
 
         $baseSlug = Str::slug($validated['titre']);
