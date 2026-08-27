@@ -12,8 +12,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        // Using raw SQL to modify ENUM column to avoid Doctrine DBAL issues with ENUMs
-        DB::statement("ALTER TABLE `evenements` MODIFY COLUMN `statut` ENUM('planifie', 'confirme', 'annule', 'termine', 'brouillon') DEFAULT 'planifie'");
+        if (DB::getDriverName() === 'pgsql') {
+            DB::statement("ALTER TABLE evenements DROP CONSTRAINT IF EXISTS evenements_statut_check");
+            DB::statement("ALTER TABLE evenements ALTER COLUMN statut TYPE VARCHAR(255)");
+            DB::statement("ALTER TABLE evenements ALTER COLUMN statut SET DEFAULT 'planifie'");
+            DB::statement("ALTER TABLE evenements ADD CONSTRAINT evenements_statut_check CHECK (statut IN ('planifie', 'confirme', 'annule', 'termine', 'brouillon'))");
+        } else {
+            DB::statement("ALTER TABLE `evenements` MODIFY COLUMN `statut` ENUM('planifie', 'confirme', 'annule', 'termine', 'brouillon') DEFAULT 'planifie'");
+        }
     }
 
     /**
@@ -21,8 +27,13 @@ return new class extends Migration
      */
     public function down(): void
     {
-        // Revert to original ENUM definition
-        DB::statement("UPDATE `evenements` SET `statut` = 'planifie' WHERE `statut` = 'brouillon'");
-        DB::statement("ALTER TABLE `evenements` MODIFY COLUMN `statut` ENUM('planifie', 'confirme', 'annule', 'termine') DEFAULT 'planifie'");
+        DB::statement("UPDATE evenements SET statut = 'planifie' WHERE statut = 'brouillon'");
+
+        if (DB::getDriverName() === 'pgsql') {
+            DB::statement("ALTER TABLE evenements DROP CONSTRAINT IF EXISTS evenements_statut_check");
+            DB::statement("ALTER TABLE evenements ADD CONSTRAINT evenements_statut_check CHECK (statut IN ('planifie', 'confirme', 'annule', 'termine'))");
+        } else {
+            DB::statement("ALTER TABLE `evenements` MODIFY COLUMN `statut` ENUM('planifie', 'confirme', 'annule', 'termine') DEFAULT 'planifie'");
+        }
     }
 };

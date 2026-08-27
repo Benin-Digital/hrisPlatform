@@ -8,15 +8,19 @@ return new class extends Migration
 {
     public function up(): void
     {
-        // On vérifie d'abord si la colonne statut existe
         if (Schema::hasColumn('taches', 'statut')) {
-            // On corrige l'enum pour inclure 'en_attente'
-            DB::statement("ALTER TABLE taches MODIFY COLUMN statut ENUM('en_attente', 'en_cours', 'terminee', 'annulee') NOT NULL DEFAULT 'en_attente'");
-
-            // On corrige les valeurs invalides existantes (sécurité)
             DB::update("UPDATE taches SET statut = 'en_attente' WHERE statut NOT IN ('en_attente', 'en_cours', 'terminee', 'annulee')");
+
+            if (DB::getDriverName() === 'pgsql') {
+                DB::statement("ALTER TABLE taches DROP CONSTRAINT IF EXISTS taches_statut_check");
+                DB::statement("ALTER TABLE taches ALTER COLUMN statut TYPE VARCHAR(255)");
+                DB::statement("ALTER TABLE taches ALTER COLUMN statut SET NOT NULL");
+                DB::statement("ALTER TABLE taches ALTER COLUMN statut SET DEFAULT 'en_attente'");
+                DB::statement("ALTER TABLE taches ADD CONSTRAINT taches_statut_check CHECK (statut IN ('en_attente', 'en_cours', 'terminee', 'annulee'))");
+            } else {
+                DB::statement("ALTER TABLE taches MODIFY COLUMN statut ENUM('en_attente', 'en_cours', 'terminee', 'annulee') NOT NULL DEFAULT 'en_attente'");
+            }
         } else {
-            // Si par miracle la colonne n'existe pas, on l'ajoute
             Schema::table('taches', function ($table) {
                 $table->enum('statut', ['en_attente', 'en_cours', 'terminee', 'annulee'])
                       ->default('en_attente')
@@ -27,8 +31,14 @@ return new class extends Migration
 
     public function down(): void
     {
-        // Revert : on remet les anciennes valeurs possibles
         DB::update("UPDATE taches SET statut = 'en_cours' WHERE statut = 'en_attente'");
-        DB::statement("ALTER TABLE taches MODIFY COLUMN statut ENUM('en_cours', 'terminee', 'annulee') NOT NULL DEFAULT 'en_cours'");
+
+        if (DB::getDriverName() === 'pgsql') {
+            DB::statement("ALTER TABLE taches DROP CONSTRAINT IF EXISTS taches_statut_check");
+            DB::statement("ALTER TABLE taches ALTER COLUMN statut SET DEFAULT 'en_cours'");
+            DB::statement("ALTER TABLE taches ADD CONSTRAINT taches_statut_check CHECK (statut IN ('en_cours', 'terminee', 'annulee'))");
+        } else {
+            DB::statement("ALTER TABLE taches MODIFY COLUMN statut ENUM('en_cours', 'terminee', 'annulee') NOT NULL DEFAULT 'en_cours'");
+        }
     }
 };

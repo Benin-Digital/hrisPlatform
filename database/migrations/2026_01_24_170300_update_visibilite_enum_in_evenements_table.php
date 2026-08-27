@@ -12,18 +12,19 @@ return new class extends Migration
      */
     public function up(): void
     {
-        // Step 1: Map existing old values to new values
-        // public -> global (public visibility for all)
-        // prive -> entite (private to entity)
-        // groupe -> groupes (group visibility)
-        // direction -> directions (direction visibility)
-        DB::statement("UPDATE `evenements` SET `visibilite` = 'global' WHERE `visibilite` = 'public'");
-        DB::statement("UPDATE `evenements` SET `visibilite` = 'entite' WHERE `visibilite` = 'prive'");
-        DB::statement("UPDATE `evenements` SET `visibilite` = 'groupes' WHERE `visibilite` = 'groupe'");
-        DB::statement("UPDATE `evenements` SET `visibilite` = 'directions' WHERE `visibilite` = 'direction'");
-        
-        // Step 2: Modify the enum to only include the new values
-        DB::statement("ALTER TABLE `evenements` MODIFY COLUMN `visibilite` ENUM('entite', 'global', 'roles', 'groupes', 'directions') DEFAULT 'entite'");
+        DB::statement("UPDATE evenements SET visibilite = 'global' WHERE visibilite = 'public'");
+        DB::statement("UPDATE evenements SET visibilite = 'entite' WHERE visibilite = 'prive'");
+        DB::statement("UPDATE evenements SET visibilite = 'groupes' WHERE visibilite = 'groupe'");
+        DB::statement("UPDATE evenements SET visibilite = 'directions' WHERE visibilite = 'direction'");
+
+        if (DB::getDriverName() === 'pgsql') {
+            DB::statement("ALTER TABLE evenements DROP CONSTRAINT IF EXISTS evenements_visibilite_check");
+            DB::statement("ALTER TABLE evenements ALTER COLUMN visibilite TYPE VARCHAR(255)");
+            DB::statement("ALTER TABLE evenements ALTER COLUMN visibilite SET DEFAULT 'entite'");
+            DB::statement("ALTER TABLE evenements ADD CONSTRAINT evenements_visibilite_check CHECK (visibilite IN ('entite', 'global', 'roles', 'groupes', 'directions'))");
+        } else {
+            DB::statement("ALTER TABLE `evenements` MODIFY COLUMN `visibilite` ENUM('entite', 'global', 'roles', 'groupes', 'directions') DEFAULT 'entite'");
+        }
     }
 
     /**
@@ -31,8 +32,14 @@ return new class extends Migration
      */
     public function down(): void
     {
-        // Revert to original enum (update values first to avoid data loss)
-        DB::statement("UPDATE `evenements` SET `visibilite` = 'public' WHERE `visibilite` IN ('entite', 'global', 'roles', 'groupes', 'directions')");
-        DB::statement("ALTER TABLE `evenements` MODIFY COLUMN `visibilite` ENUM('public', 'prive', 'groupe', 'direction') DEFAULT 'public'");
+        DB::statement("UPDATE evenements SET visibilite = 'public' WHERE visibilite IN ('entite', 'global', 'roles', 'groupes', 'directions')");
+
+        if (DB::getDriverName() === 'pgsql') {
+            DB::statement("ALTER TABLE evenements DROP CONSTRAINT IF EXISTS evenements_visibilite_check");
+            DB::statement("ALTER TABLE evenements ALTER COLUMN visibilite SET DEFAULT 'public'");
+            DB::statement("ALTER TABLE evenements ADD CONSTRAINT evenements_visibilite_check CHECK (visibilite IN ('public', 'prive', 'groupe', 'direction'))");
+        } else {
+            DB::statement("ALTER TABLE `evenements` MODIFY COLUMN `visibilite` ENUM('public', 'prive', 'groupe', 'direction') DEFAULT 'public'");
+        }
     }
 };
