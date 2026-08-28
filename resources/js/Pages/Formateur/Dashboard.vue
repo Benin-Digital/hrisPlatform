@@ -7,7 +7,7 @@ import {
     UsersIcon,
     StarIcon,
     ChartBarIcon,
-    LightningBoltIcon,
+    BoltIcon,
     PlusIcon,
     CalendarIcon,
 } from '@heroicons/vue/24/outline';
@@ -112,7 +112,7 @@ const user = window.Laravel?.user || {};
                 <!-- Actions rapides Formateur -->
                 <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6 mb-8">
                     <h2 class="text-lg font-bold text-gray-800 dark:text-gray-200 mb-4 flex items-center">
-                        <LightningBoltIcon class="w-5 h-5 mr-2 text-gray-600 dark:text-gray-400" />
+                        <BoltIcon class="w-5 h-5 mr-2 text-gray-600 dark:text-gray-400" />
                         Actions rapides
                     </h2>
                     <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
