@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
@@ -9,9 +10,7 @@ return new class extends Migration
     public function up()
     {
         Schema::table('candidatures', function (Blueprint $table) {
-            // Ajout des champs pour le processus de recrutement
             $table->enum('type', ['emploi', 'stage', 'alternance'])->default('emploi')->after('offre_emploi_id');
-            $table->enum('statut', ['nouveau', 'en_cours', 'entretien_planifie', 'entretien_realise', 'offre', 'accepte', 'refuse', 'archive'])->default('nouveau')->change();
             $table->date('date_entretien')->nullable()->after('statut');
             $table->time('heure_entretien')->nullable()->after('date_entretien');
             $table->string('lieu_entretien')->nullable()->after('heure_entretien');
@@ -23,6 +22,15 @@ return new class extends Migration
             $table->text('commentaire_recruteur')->nullable()->after('recruteur_id');
             $table->timestamp('date_validation')->nullable()->after('commentaire_recruteur');
         });
+
+        if (DB::getDriverName() === 'pgsql') {
+            DB::statement("ALTER TABLE candidatures DROP CONSTRAINT IF EXISTS candidatures_statut_check");
+            DB::statement("ALTER TABLE candidatures ALTER COLUMN statut TYPE VARCHAR(255)");
+            DB::statement("ALTER TABLE candidatures ALTER COLUMN statut SET DEFAULT 'nouveau'");
+            DB::statement("ALTER TABLE candidatures ADD CONSTRAINT candidatures_statut_check CHECK (statut IN ('nouveau', 'en_cours', 'entretien_planifie', 'entretien_realise', 'offre', 'accepte', 'refuse', 'archive'))");
+        } else {
+            DB::statement("ALTER TABLE candidatures MODIFY COLUMN statut ENUM('nouveau', 'en_cours', 'entretien_planifie', 'entretien_realise', 'offre', 'accepte', 'refuse', 'archive') DEFAULT 'nouveau'");
+        }
     }
 
     public function down()
