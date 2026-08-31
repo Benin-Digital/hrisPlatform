@@ -4,7 +4,7 @@ import { Head, Link, useForm } from '@inertiajs/vue3';
 import {
     ClipboardIcon,
     CheckCircleIcon,
-    TargetIcon,
+    FlagIcon,
     UsersIcon,
     DocumentTextIcon,
     AcademicCapIcon,
@@ -28,7 +28,7 @@ const props = defineProps({
 const iconMap = {
     'clipboard': ClipboardIcon,
     'check-circle': CheckCircleIcon,
-    'target': TargetIcon,
+    'target': FlagIcon,
     'users': UsersIcon,
     'document-text': DocumentTextIcon,
     'academic-cap': AcademicCapIcon,

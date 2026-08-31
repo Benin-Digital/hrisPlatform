@@ -14,7 +14,7 @@ import {
 import {
     ClipboardIcon,
     CheckCircleIcon,
-    TargetIcon,
+    FlagIcon,
     UsersIcon,
 } from '@heroicons/vue/24/solid';
 
@@ -22,7 +22,7 @@ import {
 const iconMap = {
     'clipboard': ClipboardIcon,
     'check-circle': CheckCircleIcon,
-    'target': TargetIcon,
+    'target': FlagIcon,
     'users': UsersIcon,
 };
 
